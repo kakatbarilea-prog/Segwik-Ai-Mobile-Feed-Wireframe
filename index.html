@@ -12,47 +12,57 @@
   html,body{height:100%;margin:0;background:var(--bg);color:var(--ink);font-family:'Segoe UI',system-ui,-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif}
   .wrap{display:flex;align-items:center;justify-content:center;min-height:100%;padding:18px}
 
-  .phone{width:392px;height:844px;background:#fff;border-radius:36px;box-shadow:0 20px 60px rgba(0,0,0,.12),0 8px 16px rgba(0,0,0,.08);position:relative;overflow:hidden;border:8px solid #111}
+  /* Deduct ~1/7 of height (844 -> ~724) */
+  .phone{width:392px;height:724px;background:#fff;border-radius:36px;box-shadow:0 20px 60px rgba(0,0,0,.12),0 8px 16px rgba(0,0,0,.08);position:relative;overflow:hidden;border:8px solid #111;display:flex;flex-direction:column}
   .notch{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:180px;height:30px;background:#111;border-radius:20px 20px 28px 28px;z-index:10}
-  .status{height:46px;padding:0 16px;display:flex;align-items:center;justify-content:center;gap:8px;border-bottom:1px solid var(--line);background:#fff;position:sticky;top:0;z-index:5}
+  .status{height:46px;padding:0 16px;display:flex;align-items:center;justify-content:center;gap:8px;border-bottom:1px solid var(--line);background:#fff;z-index:5}
   .status .logo{display:flex;align-items:center;gap:8px;font-weight:700;letter-spacing:.3px}
   .status .logo .bot{width:22px;height:22px;border-radius:50%;background:linear-gradient(145deg,#e9f0ff,#dfe9ff);display:grid;place-items:center;border:1px solid #c9d7ff}
   .status .logo .bot::before{content:"";width:10px;height:6px;border-radius:3px;display:block;background:#0F2D56;box-shadow:0 0 0 2px #b7ccff inset}
 
-  .content{position:absolute;inset:46px 0 0 0;overflow:auto;scroll-snap-type:y mandatory;background:var(--bg)}
+  .content{
+    flex:1;
+    overflow:auto;
+    scroll-snap-type:y mandatory;
+    overscroll-behavior:contain;
+    background:var(--bg)
+  }
 
-  .person{scroll-snap-align:start;min-height:calc(844px - 46px);display:flex;flex-direction:column}
+  /* SNAP one full screen per contact */
+  .person{scroll-snap-align:start;scroll-snap-stop:always;display:flex;flex-direction:column}
+  .content > .person{min-height:100%}
   .person .pane{background:var(--card);border-bottom:1px solid var(--line)}
 
-  /* Enlarged profile: ~75% larger than original (64px -> 112px) */
-  .profile{padding:28px 16px;display:grid;grid-template-columns:112px 1fr;gap:18px;align-items:center;position:relative}
-  .avatar{width:112px;height:112px;border-radius:50%;background:#dbe4ff;display:grid;place-items:center;font-weight:700;color:#0F2D56;border:2px solid #c8d4ff;font-size:28px}
-  .p-meta{display:grid;gap:8px}
-  .p-name{font-size:26px;font-weight:800;color:#0F2D56}
-  .p-line{font-size:15px;color:var(--muted)}
-  .p-extra{font-size:14px;color:var(--muted)}
-  .p-contact{display:grid;gap:6px;margin-top:6px;font-size:14px;color:var(--ink)}
+  /* Minimized padding in profile */
+  .profile{padding:12px 12px;display:grid;grid-template-columns:96px 1fr;gap:12px;align-items:center;position:relative}
+  .avatar{width:96px;height:96px;border-radius:50%;background:#dbe4ff;display:grid;place-items:center;font-weight:700;color:#0F2D56;border:2px solid #c8d4ff;font-size:24px}
+  .p-meta{display:grid;gap:4px}
+  .p-name{font-size:22px;font-weight:800;color:#0F2D56}
+  .p-line{font-size:14px;color:var(--muted)}
+  .p-extra{font-size:13px;color:var(--muted)}
+  .p-contact{display:grid;gap:4px;margin-top:4px;font-size:13px;color:var(--ink)}
   .p-contact span{display:flex;align-items:center;gap:6px}
-  .p-contact svg{width:16px;height:16px;stroke:var(--ink)}
+  .p-contact svg{width:14px;height:14px;stroke:var(--ink)}
 
   .suggest{padding:14px 16px;background:#fbfdff;border-top:1px dashed #e3ecff;border-bottom:1px dashed #e3ecff;display:flex;flex-direction:column;gap:10px}
   .suggest .spark{font-weight:700;margin-bottom:6px}
   .suggest .links{display:flex;justify-content:flex-end;gap:14px}
   .suggest a{color:#2b5bd7;text-decoration:none;font-size:12px}
 
-  .summary{flex:1;padding:16px;background:#fff}
-  .summary p{margin:0 0 10px;line-height:1.5}
-  .chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
-  .chip{border:1px solid var(--line);background:#f8fafc;padding:6px 10px;border-radius:999px;font-size:12px}
+  .summary{flex:1;padding:12px 16px;background:#fff}
+  .summary p{margin:0 0 10px;line-height:1.5;font-size:14px}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+  .chip{border:1px solid var(--line);background:#f8fafc;padding:4px 8px;border-radius:999px;font-size:11px}
 
-  .actions{background:#fff;border-top:1px solid var(--line);padding:10px 12px 16px;display:grid;gap:10px}
-  .btn-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  .btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:12px;border:1px solid var(--btn);background:var(--btn);color:#fff;font-weight:650;cursor:pointer}
-  .btn svg{width:18px;height:18px;stroke:#fff}
+  .actions{background:#fff;border-top:1px solid var(--line);padding:8px 12px 12px;display:grid;gap:8px}
+  .btn-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .btn{display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;border-radius:10px;border:1px solid var(--btn);background:var(--btn);color:#fff;font-weight:650;cursor:pointer;font-size:13px}
+  .btn svg{width:16px;height:16px;stroke:#fff}
 
-  .tray{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:10px}
-  .ibtn{padding:10px;border:1px solid var(--line);border-radius:12px;background:#f8fafc;display:grid;place-items:center;font-size:11px;cursor:pointer}
-  .ibtn svg{width:19px;height:19px}
+  /* Footer tray pinned */
+  .tray{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;padding:8px;border-top:1px solid var(--line);background:#fff;position:sticky;bottom:0}
+  .ibtn{padding:8px;border:1px solid var(--line);border-radius:10px;background:#f8fafc;display:grid;place-items:center;font-size:11px;cursor:pointer}
+  .ibtn svg{width:17px;height:17px}
 
   svg{stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 </style>
@@ -66,17 +76,29 @@
       </div>
 
       <div class="content" id="feed"></div>
+
+      <!-- Footer tray pinned -->
+      <div class="tray" id="footer-tray">
+        <div class="ibtn" data-icon="phone"></div>
+        <div class="ibtn" data-icon="mail"></div>
+        <div class="ibtn" data-icon="chat"></div>
+        <div class="ibtn" data-icon="calendar"></div>
+        <div class="ibtn" data-icon="note"></div>
+      </div>
     </div>
   </div>
 
 <script>
 const contacts = [
-  {id:'c1',name:'Steven Bowles',initials:'SB',tier:'Subscriber',segment:'Corporate',company:'Catalyst Advisory',industry:'Financial Services',website:'catalystadvisory.io',email:'steven@catalystadvisory.io',phone:'(215) 680-6887',lastContactDays:3,onJourney:true,journey:{name:'Downloaded vCard Journey',phase:'Update Contact Details',phaseDays:3},missing:['linkedin'],notes:["Prefers email mornings"]},
-  {id:'c2',name:'Amina Patel',initials:'AP',tier:'Contact',segment:'SMB',company:'Studio Uve',industry:'Design',website:'studiouve.com',email:'amina@studiouve.com',phone:'(732) 555‑0199',lastContactDays:23,onJourney:false,journey:null,missing:[],notes:["Tagged as potential referral partner"]},
-  {id:'c3',name:'Carlos Ramirez',initials:'CR',tier:'Prospect',segment:'Nonprofit',company:'Arts Monmouth',industry:'Arts',website:'artsmonmouth.org',email:'director@artsmonmouth.org',phone:'(908) 555‑1122',lastContactDays:8,onJourney:true,journey:{name:'Met at an Event',phase:'Manual Follow-Up',phaseDays:5},missing:[],notes:["We met at the coffee networking at the Diner in New Jersey"]},
-  {id:'c4',name:'Maya Chen',initials:'MC',tier:'Warm Lead',segment:'Startup',company:'Fleetio AI',industry:null,website:null,email:'maya@fleetio.ai',phone:'(646) 555‑4400',lastContactDays:30,onJourney:false,journey:null,missing:['industry','website'],notes:["Met via Janet – AI fleet analytics"]},
-  {id:'c5',name:'Vladimir Petrov',initials:'VP',tier:'Member',segment:'BNI',company:'Scale Partners',industry:'Advisory',website:null,email:'vlad@scalepartners.io',phone:'(917) 555‑7777',lastContactDays:52,onJourney:true,journey:{name:'Event Follow‑Up',phase:'First Check‑In',phaseDays:52},missing:['website'],notes:["Spoke at breakfast"]}
+  {id:'c1',name:'Steven Bowles',initials:'SB',tier:'Subscriber',segment:'Corporate',company:'Catalyst Advisory',industry:'Financial Services',website:'catalystadvisory.io',email:'steven@catalystadvisory.io',phone:'(215) 680-6887',lastContactDays:3,onJourney:true,journey:{name:'Downloaded vCard Journey',phase:'Update Contact Details',phaseDays:3},missing:['linkedin'],notes:["Prefers email mornings"]}, 
+{id:'c2',name:'Amina Patel',initials:'AP',tier:'Contact',segment:'SMB',company:'Studio Uve',industry:'Design',website:'studiouve.com',email:'amina@studiouve.com',phone:'(732) 555-0199',lastContactDays:23,onJourney:false,journey:{name:'No Journey',phase:'No Phase',phaseDays:0},missing:['profile photo'],notes:["Tagged as potential referral partner"]}, 
+{id:'c3',name:'Carlos Ramirez',initials:'CR',tier:'Prospect',segment:'Nonprofit',company:'Arts Monmouth',industry:'Arts',website:'artsmonmouth.org',email:'director@artsmonmouth.org',phone:'(908) 555-1122',lastContactDays:8,onJourney:true,journey:{name:'Met at an Event',phase:'Manual Follow-Up',phaseDays:5},missing:['profile photo'],notes:["We met at the coffee networking at the Diner in New Jersey"]}, 
+{id:'c4',name:'Maya Chen',initials:'MC',tier:'Warm Lead',segment:'Startup',company:'Fleetio AI',industry:'No Industry',website:'No Website',email:'maya@fleetio.ai',phone:'(646) 555-4400',lastContactDays:30,onJourney:false,journey:{name:'No Journey',phase:'No Phase',phaseDays:0},missing:['industry','website'],notes:["Met via Janet – AI fleet analytics"]}, 
+{id:'c5',name:'Vladimir Petrov',initials:'VP',tier:'Member',segment:'BNI',company:'Scale Partners',industry:'Advisory',website:'No Website',email:'vlad@scalepartners.io',phone:'(917) 555-7777',lastContactDays:52,onJourney:true,journey:{name:'Event Follow-Up',phase:'First Check-In',phaseDays:52},missing:['website'],notes:["Spoke at breakfast"]}
 ];
+
+// per-contact suggestion index
+const suggestionIndex = Object.fromEntries(contacts.map(c=>[c.id,0]));
 
 function render(){
   document.getElementById('feed').innerHTML = contacts.map(c=>personCard(c)).join('');
@@ -85,7 +107,7 @@ function render(){
 function personCard(c){
   const chips = [
     c.onJourney? `Journey: ${c.journey.name}`:'No Journey',
-    c.onJourney? `Phase: ${c.journey.phase}`:'—',
+    c.onJourney? `Phase: ${c.journey.phase}`:'No Phase',
     `Last Contact: ${c.lastContactDays} days ago`,
     `Missing: ${c.missing.length? c.missing.join(', '):'None'}`
   ];
@@ -93,6 +115,8 @@ function personCard(c){
   const company = c.company || '+Add Company';
   const industry = c.industry || '+Add Industry';
   const website = c.website || '+Add Website';
+
+  const narrative = generateSummary(c);
 
   return `
   <section class="person">
@@ -109,17 +133,17 @@ function personCard(c){
       </div>
     </div>
 
-    <div class="suggest">
-      <div><span class="spark">✨ Segwik Suggests</span><br>${suggestionLine(c)}</div>
-      <div class="links">
-        <a href="#">Remind Later</a>
-        <a href="#">Dismiss</a>
-      </div>
+    <div class="summary">
+      <p>${narrative}</p>
+      <div class="chips">${chips.map(ch=>`<span class="chip">${ch}</span>`).join('')}</div>
     </div>
 
-    <div class="summary">
-      <p>${generateSummary(c)}</p>
-      <div class="chips">${chips.map(ch=>`<span class="chip">${ch}</span>`).join('')}</div>
+    <div class="suggest">
+      <div><span class="spark">✨ Segwik Suggests:</span><br>${currentSuggestion(c)}</div>
+      <div class="links">
+        <a href="#" onclick="cycleSuggestion('${c.id}');return false;">Remind Later</a>
+        <a href="#" onclick="cycleSuggestion('${c.id}');return false;">Dismiss</a>
+      </div>
     </div>
 
     <div class="actions">
@@ -131,31 +155,36 @@ function personCard(c){
         <button class="btn">${icon('calendar')} Schedule Meeting</button>
         <button class="btn">${icon('info')} Personalize Contact</button>
       </div>
-      <div class="tray">
-        <div class="ibtn">${icon('phone')}</div>
-        <div class="ibtn">${icon('mail')}</div>
-        <div class="ibtn">${icon('chat')}</div>
-        <div class="ibtn">${icon('calendar')}</div>
-        <div class="ibtn">${icon('note')}</div>
-      </div>
     </div>
   </section>`
 }
 
 function generateSummary(c){
-  let t = `${c.name.split(' ')[0]} `;
-  if(c.onJourney){t+=`is on the “${c.journey.name}” journey in “${c.journey.phase}” for ${c.journey.phaseDays} days.`;} else {t+=`isn’t on a journey yet.`;}
-  t+=` Last touch was ${c.lastContactDays} days ago.`;
-  if(c.missing.length){t+=` Missing: ${c.missing.join(', ')}.`;}
-  if(c.notes.length){t+=` Recent note: “${c.notes[c.notes.length-1]}.”`;}
-  return t;
+  const first = c.onJourney
+    ? `${c.name.split(' ')[0]} is on the “${c.journey.name}” journey in “${c.journey.phase}” for ${c.journey.phaseDays} days.`
+    : `${c.name.split(' ')[0]} isn’t on a journey yet.`;
+  const lastTouch = ` Last touch was ${c.lastContactDays} days ago.`;
+  const missing = c.missing.length ? ` Missing: ${c.missing.join(', ')}.` : '';
+  const note = c.notes.length ? ` Recent note: “${c.notes[c.notes.length-1]}.”` : '';
+  return `${first}${lastTouch}${missing}${note}`;
 }
 
-function suggestionLine(c){
-  if(!c.onJourney) return `Add ${c.name.split(' ')[0]} to a journey?`;
-  if(c.journey.phaseDays>=5) return `${c.name.split(' ')[0]} has been in “${c.journey.phase}” for ${c.journey.phaseDays} days — follow up?`;
-  if(c.missing.length) return `Do you know the ${c.missing[0]} for ${c.name.split(' ')[0]}?`;
-  return `Looks good. Want a light check-in?`;
+function currentSuggestion(c){
+  const idx = suggestionIndex[c.id] ?? 0;
+  const list = c.suggestions && c.suggestions.length ? c.suggestions : [defaultSuggestion(c)];
+  return list[idx % list.length];
+}
+
+function defaultSuggestion(c){
+  if(c.missing.includes('linkedin')) return `Check out ${c.name.split(' ')[0]}’s LinkedIn profile.`;
+  if(!c.onJourney) return `Add ${c.name.split(' ')[0]} to a relevant journey to keep momentum.`;
+  if(c.journey.phaseDays>=5) return `Nudge ${c.name.split(' ')[0]} to move forward from “${c.journey.phase}.”`;
+  return `Send a light check-in to stay top of mind.`;
+}
+
+function cycleSuggestion(id){
+  suggestionIndex[id] = (suggestionIndex[id] ?? 0) + 1;
+  render();
 }
 
 function icon(name){
@@ -170,6 +199,16 @@ function icon(name){
     default: return '';
   }
 }
+
+/* Populate footer icons once the functions are defined */
+(function populateFooterIcons(){
+  const tray = document.getElementById('footer-tray');
+  if(!tray) return;
+  tray.querySelectorAll('[data-icon]').forEach(el=>{
+    const name = el.getAttribute('data-icon');
+    el.innerHTML = icon(name);
+  });
+})();
 
 render();
 </script>
