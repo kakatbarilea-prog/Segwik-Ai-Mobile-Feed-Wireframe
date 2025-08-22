@@ -1,1 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>Segwik AI – Mobile Feed Wireframe</title>
+<style>
+  :root{
+    --bg:#f6f8fb; --card:#ffffff; --ink:#243048; --muted:#667085; --line:#e6ebf2; --accent:#0F2D56; --ok:#0b62ff; --warn:#b26a00; --good:#0aa36a; --bad:#d64545; --pill:#eef4ff;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;background:var(--bg);color:var(--ink);font-family:'Segoe UI',system-ui,-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif}
+  .wrap{display:flex;align-items:center;justify-content:center;min-height:100%;padding:18px}
+
+  .phone{width:392px;height:844px;background:#fff;border-radius:36px;box-shadow:0 20px 60px rgba(0,0,0,.12),0 8px 16px rgba(0,0,0,.08);position:relative;overflow:hidden;border:8px solid #111}
+  .notch{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:180px;height:30px;background:#111;border-radius:20px 20px 28px 28px;z-index:10}
+  .status{height:46px;padding:0 16px;display:flex;align-items:center;justify-content:center;gap:8px;border-bottom:1px solid var(--line);background:#fff;position:sticky;top:0;z-index:5}
+  .status .logo{display:flex;align-items:center;gap:8px;font-weight:700;letter-spacing:.3px}
+  .status .logo .bot{width:22px;height:22px;border-radius:50%;background:linear-gradient(145deg,#e9f0ff,#dfe9ff);display:grid;place-items:center;border:1px solid #c9d7ff}
+  .status .logo .bot::before{content:"";width:10px;height:6px;border-radius:3px;display:block;background:#0F2D56;box-shadow:0 0 0 2px #b7ccff inset}
+
+  .content{position:absolute;inset:46px 0 0 0;overflow:auto;scroll-snap-type:y mandatory;background:var(--bg)}
+
+  .person{scroll-snap-align:start;min-height:calc(844px - 46px);display:flex;flex-direction:column}
+  .person .pane{background:var(--card);border-bottom:1px solid var(--line)}
+
+  .profile{padding:16px 16px 12px;display:grid;grid-template-columns:64px 1fr;gap:12px;align-items:center;position:relative}
+  .avatar{width:64px;height:64px;border-radius:50%;background:#dbe4ff;display:grid;place-items:center;font-weight:700;color:#0F2D56;border:2px solid #c8d4ff}
+  .p-meta{display:grid;gap:4px}
+  .p-name{font-size:20px;font-weight:800;color:#0F2D56}
+  .p-line{font-size:13px;color:var(--muted)}
+  .p-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+  .tag{font-size:11px;background:#f1f5ff;border:1px solid #dfe6ff;color:#2a3b73;padding:4px 8px;border-radius:999px}
+
+  .suggest{padding:14px 16px;background:#fbfdff;border-top:1px dashed #e3ecff;border-bottom:1px dashed #e3ecff;display:flex;flex-direction:column;gap:10px}
+  .suggest .spark{font-weight:700;margin-bottom:6px}
+  .suggest .links{display:flex;justify-content:flex-end;gap:14px}
+  .suggest a{color:#2b5bd7;text-decoration:none;font-size:12px}
+
+  .summary{flex:1;padding:16px;background:#fff}
+  .summary p{margin:0 0 10px;line-height:1.5}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+  .chip{border:1px solid var(--line);background:#f8fafc;padding:6px 10px;border-radius:999px;font-size:12px}
+
+  .actions{background:#fff;border-top:1px solid var(--line);padding:10px 12px 16px;display:grid;gap:10px}
+  .btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:12px;border:1px solid var(--line);background:#fff;font-weight:650;cursor:pointer}
+  .btn svg{width:18px;height:18px}
+  .btn.ok{background:#e7f0ff;border-color:#cfe1ff}
+  .btn.good{background:#e8fbf3;border-color:#ccefe0}
+  .btn.warn{background:#fff7e6;border-color:#ffe1ae}
+  .btn.bad{background:#ffeeee;border-color:#ffd2d2}
+
+  svg{stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="phone" id="phone">
+      <div class="notch"></div>
+      <div class="status">
+        <div class="logo"><span class="bot"></span><span>SEGWiK</span></div>
+      </div>
+
+      <div class="content" id="feed"></div>
+    </div>
+  </div>
+
+<script>
+const contacts = [
+  {id:'c1',name:'Steven Bowles',initials:'SB',tier:'Subscriber',segment:'Corporate',email:'steven@catalystadvisory.io',phone:'(215) 680-6887',lastContactDays:3,onJourney:true,journey:{name:'Downloaded vCard Journey',phase:'Update Contact Details',phaseDays:3},missing:['industry','linkedin'],notes:["Prefers email mornings"]},
+  {id:'c2',name:'Amina Patel',initials:'AP',tier:'Contact',segment:'SMB',email:'amina@studiouve.com',phone:'(732) 555‑0199',lastContactDays:23,onJourney:false,journey:null,missing:[],notes:["Tagged as potential referral partner"]},
+  {id:'c3',name:'Carlos Ramirez',initials:'CR',tier:'Prospect',segment:'Nonprofit',email:'director@artsmonmouth.org',phone:'(908) 555‑1122',lastContactDays:8,onJourney:true,journey:{name:'Met at an Event',phase:'Manual Follow-Up',phaseDays:5},missing:[],notes:["We met at the coffee networking at the Diner in New Jersey"]},
+  {id:'c4',name:'Maya Chen',initials:'MC',tier:'Warm Lead',segment:'Startup',email:'maya@fleetio.ai',phone:'(646) 555‑4400',lastContactDays:30,onJourney:false,journey:null,missing:['industry','website'],notes:["Met via Janet – AI fleet analytics"]},
+  {id:'c5',name:'Vladimir Petrov',initials:'VP',tier:'Member',segment:'BNI',email:'vlad@scalepartners.io',phone:'(917) 555‑7777',lastContactDays:52,onJourney:true,journey:{name:'Event Follow‑Up',phase:'First Check‑In',phaseDays:52},missing:['website'],notes:["Spoke at breakfast"]}
+];
+
+function render(){
+  document.getElementById('feed').innerHTML = contacts.map(c=>personCard(c)).join('');
+}
+
+function personCard(c){
+  const chips = [
+    c.onJourney? `Journey: ${c.journey.name}`:'No Journey',
+    c.onJourney? `Phase: ${c.journey.phase}`:'—',
+    `Last Contact: ${c.lastContactDays} days ago`,
+    `Missing: ${c.missing.length? c.missing.join(', '):'None'}`
+  ];
+
+  return `
+  <section class="person">
+    <div class="pane profile">
+      <div class="avatar">${c.initials}</div>
+      <div class="p-meta">
+        <div class="p-name">${c.name}</div>
+        <div class="p-line">${c.tier} · ${c.segment}</div>
+        <div class="p-tags">
+          <span class="tag">${c.email}</span>
+          <span class="tag">${c.phone}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="suggest">
+      <div><span class="spark">✨ Segwik Suggests</span><br>${suggestionLine(c)}</div>
+      <div class="links">
+        <a href="#">Remind Later</a>
+        <a href="#">Dismiss</a>
+      </div>
+    </div>
+
+    <div class="summary">
+      <p>${generateSummary(c)}</p>
+      <div class="chips">${chips.map(ch=>`<span class="chip">${ch}</span>`).join('')}</div>
+    </div>
+
+    <div class="actions">
+      <button class="btn warn">Add to a Journey</button>
+      <button class="btn good">Send Email</button>
+      <button class="btn ok">Schedule Meeting</button>
+      <button class="btn">Personalize Contact</button>
+    </div>
+  </section>`
+}
+
+function generateSummary(c){
+  let t = `${c.name.split(' ')[0]} `;
+  if(c.onJourney){t+=`is on the “${c.journey.name}” journey in “${c.journey.phase}” for ${c.journey.phaseDays} days.`;} else {t+=`isn’t on a journey yet.`;}
+  t+=` Last touch was ${c.lastContactDays} days ago.`;
+  if(c.missing.length){t+=` Missing: ${c.missing.join(', ')}.`;}
+  if(c.notes.length){t+=` Recent note: “${c.notes[c.notes.length-1]}.”`;}
+  return t;
+}
+
+function suggestionLine(c){
+  if(!c.onJourney) return `Add ${c.name.split(' ')[0]} to a journey?`;
+  if(c.journey.phaseDays>=5) return `${c.name.split(' ')[0]} has been in “${c.journey.phase}” for ${c.journey.phaseDays} days — follow up?`;
+  if(c.missing.length) return `Do you know the ${c.missing[0]} for ${c.name.split(' ')[0]}?`;
+  return `Looks good. Want a light check-in?`;
+}
+
+render();
+</script>
+</body>
+</html>
 
