@@ -6,7 +6,7 @@
 <title>Segwik AI – Mobile Feed Wireframe</title>
 <style>
   :root{
-    --bg:#f6f8fb; --card:#ffffff; --ink:#243048; --muted:#667085; --line:#e6ebf2; --accent:#0F2D56; --ok:#0b62ff; --warn:#b26a00; --good:#0aa36a; --bad:#d64545; --pill:#eef4ff;
+    --bg:#f6f8fb; --card:#ffffff; --ink:#243048; --muted:#667085; --line:#e6ebf2; --accent:#0F2D56; --btn:#1d305e;
   }
   *{box-sizing:border-box}
   html,body{height:100%;margin:0;background:var(--bg);color:var(--ink);font-family:'Segoe UI',system-ui,-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif}
@@ -24,13 +24,16 @@
   .person{scroll-snap-align:start;min-height:calc(844px - 46px);display:flex;flex-direction:column}
   .person .pane{background:var(--card);border-bottom:1px solid var(--line)}
 
-  .profile{padding:16px 16px 12px;display:grid;grid-template-columns:64px 1fr;gap:12px;align-items:center;position:relative}
-  .avatar{width:64px;height:64px;border-radius:50%;background:#dbe4ff;display:grid;place-items:center;font-weight:700;color:#0F2D56;border:2px solid #c8d4ff}
-  .p-meta{display:grid;gap:4px}
-  .p-name{font-size:20px;font-weight:800;color:#0F2D56}
-  .p-line{font-size:13px;color:var(--muted)}
-  .p-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
-  .tag{font-size:11px;background:#f1f5ff;border:1px solid #dfe6ff;color:#2a3b73;padding:4px 8px;border-radius:999px}
+  /* Enlarged profile: ~75% larger than original (64px -> 112px) */
+  .profile{padding:28px 16px;display:grid;grid-template-columns:112px 1fr;gap:18px;align-items:center;position:relative}
+  .avatar{width:112px;height:112px;border-radius:50%;background:#dbe4ff;display:grid;place-items:center;font-weight:700;color:#0F2D56;border:2px solid #c8d4ff;font-size:28px}
+  .p-meta{display:grid;gap:8px}
+  .p-name{font-size:26px;font-weight:800;color:#0F2D56}
+  .p-line{font-size:15px;color:var(--muted)}
+  .p-extra{font-size:14px;color:var(--muted)}
+  .p-contact{display:grid;gap:6px;margin-top:6px;font-size:14px;color:var(--ink)}
+  .p-contact span{display:flex;align-items:center;gap:6px}
+  .p-contact svg{width:16px;height:16px;stroke:var(--ink)}
 
   .suggest{padding:14px 16px;background:#fbfdff;border-top:1px dashed #e3ecff;border-bottom:1px dashed #e3ecff;display:flex;flex-direction:column;gap:10px}
   .suggest .spark{font-weight:700;margin-bottom:6px}
@@ -43,12 +46,13 @@
   .chip{border:1px solid var(--line);background:#f8fafc;padding:6px 10px;border-radius:999px;font-size:12px}
 
   .actions{background:#fff;border-top:1px solid var(--line);padding:10px 12px 16px;display:grid;gap:10px}
-  .btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:12px;border:1px solid var(--line);background:#fff;font-weight:650;cursor:pointer}
-  .btn svg{width:18px;height:18px}
-  .btn.ok{background:#e7f0ff;border-color:#cfe1ff}
-  .btn.good{background:#e8fbf3;border-color:#ccefe0}
-  .btn.warn{background:#fff7e6;border-color:#ffe1ae}
-  .btn.bad{background:#ffeeee;border-color:#ffd2d2}
+  .btn-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:12px;border:1px solid var(--btn);background:var(--btn);color:#fff;font-weight:650;cursor:pointer}
+  .btn svg{width:18px;height:18px;stroke:#fff}
+
+  .tray{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:10px}
+  .ibtn{padding:10px;border:1px solid var(--line);border-radius:12px;background:#f8fafc;display:grid;place-items:center;font-size:11px;cursor:pointer}
+  .ibtn svg{width:19px;height:19px}
 
   svg{stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 </style>
@@ -67,11 +71,11 @@
 
 <script>
 const contacts = [
-  {id:'c1',name:'Steven Bowles',initials:'SB',tier:'Subscriber',segment:'Corporate',email:'steven@catalystadvisory.io',phone:'(215) 680-6887',lastContactDays:3,onJourney:true,journey:{name:'Downloaded vCard Journey',phase:'Update Contact Details',phaseDays:3},missing:['industry','linkedin'],notes:["Prefers email mornings"]},
-  {id:'c2',name:'Amina Patel',initials:'AP',tier:'Contact',segment:'SMB',email:'amina@studiouve.com',phone:'(732) 555‑0199',lastContactDays:23,onJourney:false,journey:null,missing:[],notes:["Tagged as potential referral partner"]},
-  {id:'c3',name:'Carlos Ramirez',initials:'CR',tier:'Prospect',segment:'Nonprofit',email:'director@artsmonmouth.org',phone:'(908) 555‑1122',lastContactDays:8,onJourney:true,journey:{name:'Met at an Event',phase:'Manual Follow-Up',phaseDays:5},missing:[],notes:["We met at the coffee networking at the Diner in New Jersey"]},
-  {id:'c4',name:'Maya Chen',initials:'MC',tier:'Warm Lead',segment:'Startup',email:'maya@fleetio.ai',phone:'(646) 555‑4400',lastContactDays:30,onJourney:false,journey:null,missing:['industry','website'],notes:["Met via Janet – AI fleet analytics"]},
-  {id:'c5',name:'Vladimir Petrov',initials:'VP',tier:'Member',segment:'BNI',email:'vlad@scalepartners.io',phone:'(917) 555‑7777',lastContactDays:52,onJourney:true,journey:{name:'Event Follow‑Up',phase:'First Check‑In',phaseDays:52},missing:['website'],notes:["Spoke at breakfast"]}
+  {id:'c1',name:'Steven Bowles',initials:'SB',tier:'Subscriber',segment:'Corporate',company:'Catalyst Advisory',industry:'Financial Services',website:'catalystadvisory.io',email:'steven@catalystadvisory.io',phone:'(215) 680-6887',lastContactDays:3,onJourney:true,journey:{name:'Downloaded vCard Journey',phase:'Update Contact Details',phaseDays:3},missing:['linkedin'],notes:["Prefers email mornings"]},
+  {id:'c2',name:'Amina Patel',initials:'AP',tier:'Contact',segment:'SMB',company:'Studio Uve',industry:'Design',website:'studiouve.com',email:'amina@studiouve.com',phone:'(732) 555‑0199',lastContactDays:23,onJourney:false,journey:null,missing:[],notes:["Tagged as potential referral partner"]},
+  {id:'c3',name:'Carlos Ramirez',initials:'CR',tier:'Prospect',segment:'Nonprofit',company:'Arts Monmouth',industry:'Arts',website:'artsmonmouth.org',email:'director@artsmonmouth.org',phone:'(908) 555‑1122',lastContactDays:8,onJourney:true,journey:{name:'Met at an Event',phase:'Manual Follow-Up',phaseDays:5},missing:[],notes:["We met at the coffee networking at the Diner in New Jersey"]},
+  {id:'c4',name:'Maya Chen',initials:'MC',tier:'Warm Lead',segment:'Startup',company:'Fleetio AI',industry:null,website:null,email:'maya@fleetio.ai',phone:'(646) 555‑4400',lastContactDays:30,onJourney:false,journey:null,missing:['industry','website'],notes:["Met via Janet – AI fleet analytics"]},
+  {id:'c5',name:'Vladimir Petrov',initials:'VP',tier:'Member',segment:'BNI',company:'Scale Partners',industry:'Advisory',website:null,email:'vlad@scalepartners.io',phone:'(917) 555‑7777',lastContactDays:52,onJourney:true,journey:{name:'Event Follow‑Up',phase:'First Check‑In',phaseDays:52},missing:['website'],notes:["Spoke at breakfast"]}
 ];
 
 function render(){
@@ -86,16 +90,21 @@ function personCard(c){
     `Missing: ${c.missing.length? c.missing.join(', '):'None'}`
   ];
 
+  const company = c.company || '+Add Company';
+  const industry = c.industry || '+Add Industry';
+  const website = c.website || '+Add Website';
+
   return `
   <section class="person">
     <div class="pane profile">
       <div class="avatar">${c.initials}</div>
       <div class="p-meta">
         <div class="p-name">${c.name}</div>
-        <div class="p-line">${c.tier} · ${c.segment}</div>
-        <div class="p-tags">
-          <span class="tag">${c.email}</span>
-          <span class="tag">${c.phone}</span>
+        <div class="p-line">${c.tier} · ${company}</div>
+        <div class="p-extra">${industry} · ${website}</div>
+        <div class="p-contact">
+          <span>${icon('mail')} ${c.email}</span>
+          <span>${icon('phone')} ${c.phone}</span>
         </div>
       </div>
     </div>
@@ -114,10 +123,21 @@ function personCard(c){
     </div>
 
     <div class="actions">
-      <button class="btn warn">Add to a Journey</button>
-      <button class="btn good">Send Email</button>
-      <button class="btn ok">Schedule Meeting</button>
-      <button class="btn">Personalize Contact</button>
+      <div class="btn-row">
+        <button class="btn">${icon('rocket')} Add to a Journey</button>
+        <button class="btn">${icon('mail')} Send Email</button>
+      </div>
+      <div class="btn-row">
+        <button class="btn">${icon('calendar')} Schedule Meeting</button>
+        <button class="btn">${icon('info')} Personalize Contact</button>
+      </div>
+      <div class="tray">
+        <div class="ibtn">${icon('phone')}</div>
+        <div class="ibtn">${icon('mail')}</div>
+        <div class="ibtn">${icon('chat')}</div>
+        <div class="ibtn">${icon('calendar')}</div>
+        <div class="ibtn">${icon('note')}</div>
+      </div>
     </div>
   </section>`
 }
@@ -138,8 +158,20 @@ function suggestionLine(c){
   return `Looks good. Want a light check-in?`;
 }
 
+function icon(name){
+  switch(name){
+    case 'mail': return `<svg viewBox='0 0 24 24'><path d='M4 6h16v12H4z'/><path d='M4 7l8 6 8-6'/></svg>`;
+    case 'phone': return `<svg viewBox='0 0 24 24'><path d='M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.3 1.77.57 2.61a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.47-1.11a2 2 0 0 1 2.11-.45c.84.27 1.71.45 2.61.57A2 2 0 0 1 22 16.92z'/></svg>`;
+    case 'chat': return `<svg viewBox='0 0 24 24'><path d='M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z'/></svg>`;
+    case 'calendar': return `<svg viewBox='0 0 24 24'><path d='M3 8h18M5 4h14v16H5z'/><path d='M16 2v4M8 2v4'/></svg>`;
+    case 'note': return `<svg viewBox='0 0 24 24'><path d='M4 3h14l2 2v16H4z'/><path d='M9 13h6M9 9h6M9 17h3'/></svg>`;
+    case 'info': return `<svg viewBox='0 0 24 24'><circle cx='12' cy='12' r='10'/><path d='M12 8h.01M11 12h2v4h-2z'/></svg>`;
+    case 'rocket': return `<svg viewBox='0 0 24 24'><path d='M5 19c0-3 2-5 5-5 0-3 2-5 5-5l4-4-4 10-10 4z'/><path d='M5 19l4-4'/></svg>`;
+    default: return '';
+  }
+}
+
 render();
 </script>
 </body>
 </html>
-
