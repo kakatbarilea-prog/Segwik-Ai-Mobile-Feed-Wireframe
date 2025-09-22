@@ -7,13 +7,17 @@
 <style>
   :root{
     --bg:#f6f8fb; --card:#ffffff; --ink:#243048; --muted:#667085; --line:#e6ebf2; --accent:#0F2D56; --btn:#1d305e;
+
+    /* Added: easy-to-tweak phone size (fonts do NOT scale) */
+    --phone-w: 430px;
+    --phone-h: 900px;
   }
   *{box-sizing:border-box}
   html,body{height:100%;margin:0;background:var(--bg);color:var(--ink);font-family:'Segoe UI',system-ui,-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif}
   .wrap{display:flex;align-items:center;justify-content:center;min-height:100%;padding:18px}
 
   /* Deduct ~1/7 of height (844 -> ~724) */
-  .phone{width:392px;height:724px;background:#fff;border-radius:36px;box-shadow:0 20px 60px rgba(0,0,0,.12),0 8px 16px rgba(0,0,0,.08);position:relative;overflow:hidden;border:8px solid #111;display:flex;flex-direction:column}
+  .phone{width:var(--phone-w);height:var(--phone-h);background:#fff;border-radius:36px;box-shadow:0 20px 60px rgba(0,0,0,.12),0 8px 16px rgba(0,0,0,.08);position:relative;overflow:hidden;border:8px solid #111;display:flex;flex-direction:column}
   .notch{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:180px;height:30px;background:#111;border-radius:20px 20px 28px 28px;z-index:10}
   .status{height:46px;padding:0 16px;display:flex;align-items:center;justify-content:center;gap:8px;border-bottom:1px solid var(--line);background:#fff;z-index:5}
   .status .logo{display:flex;align-items:center;gap:8px;font-weight:700;letter-spacing:.3px}
